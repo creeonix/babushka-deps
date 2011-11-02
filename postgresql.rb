@@ -2,12 +2,6 @@ dep 'postgresql-configured' do
   requires [
     'admin-can-full-sudo',
     'pg-hba.config_copied',
-    'hrtool-dev.pgpasswd',
-    'hrtool-production.pgpasswd',
-    'hrtool-test.pgpasswd',
-    'hrtool-dev.pgdb',
-    'hrtool-production.pgdb',
-    'hrtool-test.pgdb'
   ]
 end
 
@@ -23,58 +17,12 @@ dep 'postgresql.started' do
   services %W( postgresql-8.4 )
 end
 
-dep 'hrtool.pguser' do
-  user 'hrtool'
-  password 'hrtoolsecret'
-end
-
-dep 'hrtool-dev.pgdb' do
-  requires 'hrtool.pguser'
-  
-  db "hrtool_development"
-  user 'hrtool'
-end
-
-dep 'hrtool-production.pgdb' do
-  requires 'hrtool.pguser'
-  
-  db "hrtool_production"
-  user 'hrtool'
-end
-
-dep 'hrtool-test.pgdb' do
-  requires 'hrtool.pguser'
-  
-  db "hrtool_test"
-  user 'hrtool'
-end
-
-dep 'hrtool-dev.pgpasswd' do
-  requires 'hrtool.pguser'
-  
-  user 'hrtool'
-  password 'hrtoolsecret'
-  db "hrtool_development"
-end
-
-dep 'hrtool-production.pgpasswd' do
-  requires 'hrtool.pguser'
-  
-  user 'hrtool'
-  password 'hrtoolsecret'
-  db "hrtool_production"
-end
-
-dep 'hrtool-test.pgpasswd' do
-  requires 'hrtool.pguser'
-  
-  user 'hrtool'
-  password 'hrtoolsecret'
-  db "hrtool_test"
-end
-
 dep 'pg-hba.config_copied' do
-  requires 'postgresql.managed'
+  
+  requires [
+    'locale-default.config_copied',
+    'postgresql.managed'
+  ]
 
   def pg_version
     "8.4"
