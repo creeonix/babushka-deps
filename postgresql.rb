@@ -3,7 +3,9 @@ dep 'postgresql-configured' do
   requires [
     'admin-can-full-sudo',
     'set.locale',
-    'postgres.managed'
+    'postgres-backports',
+    'postgres access',
+    'existing postgres db'
   ]
 
   def pg_version
