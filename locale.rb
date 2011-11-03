@@ -1,20 +1,29 @@
-dep 'locales-generated' do
-  requires 'locale-gen.config_copied'
-  
-  met? {
-    @locales_generated || false
-  }
-  
-  meet {
-    sudo 'locale-gen', :log => true
-    @locales_generated = true
-  }
+meta :locale do
+  def locale_regex
+    /en_(AU|US)\.utf-?8/i
+  end
+  def local_locale
+    shell('locale -a').split("\n").detect {|l|
+      l[locale_regex]
+    }
+  end
 end
 
-dep 'locale-default.config_copied' do
-  path '/etc/default/locale'
-  source 'configs/locale'
-  should_sudo true
-  should_replace true
-  owner 'root:root'
+dep 'set.locale' do
+  requires 'exists.locale'
+  met? {
+    shell('locale').val_for('LANG')[locale_regex]
+  }
+  on :apt do
+    meet {
+      sudo("echo 'LANG=#{local_locale}' > /etc/default/locale")
+    }
+    after {
+      log "Setting the locale doesn't take effect until you log out and back in."
+    }
+  end
+end
+
+dep 'exists.locale' do
+  met? { local_locale }
 end
