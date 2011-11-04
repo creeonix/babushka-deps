@@ -24,7 +24,7 @@ dep 'runit-symlinked' do
   }
   
   meet {
-    render_erb "templates/runit/bashrc.erb", :to => "/etc/sv/finish".p
+    render_erb "templates/runit/finish.erb", :to => "/etc/sv/finish".p
     shell('chmod +x /etc/sv/finish')
   }
 end
