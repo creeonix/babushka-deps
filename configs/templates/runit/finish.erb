@@ -1,0 +1,19 @@
+#!/bin/sh
+
+CODE=$1
+STATUS=$2
+SERVICE=$(basename $(pwd))
+HOSTNAME=$(hostname)
+DATE=$(date '+%F %T')
+ERR_SUBJECT="$SERVICE failed on $HOSTNAME" 
+STOP_SUBJECT="$SERVICE stopped on $HOSTNAME" 
+MAIL_BODY="$DATE\nExit code of run-script: $CODE;\nExit code of service program: $STATUS" 
+
+[ -r ../env ] && . ../env
+
+if [ $STATUS -ne 0 ]; then
+    echo "$MAIL_BODY" | mail -s "$ERR_SUBJECT" $MAILTO
+else
+    echo "$MAIL_BODY" | mail -s "$STOP_SUBJECT" $MAILTO
+fi
+<%# this is a dumb comment to preserve a newline %>
