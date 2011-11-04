@@ -8,14 +8,6 @@ dep 'runit-configured' do
     'runit.managed',
     'runit-symlinked'
   ]
-  
-  met? {
-    
-  }
-  
-  meet {
-    
-  }
 end
 
 dep 'runit-symlinked' do
